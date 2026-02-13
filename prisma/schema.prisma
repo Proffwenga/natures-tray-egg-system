@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String
+  role          String      // ADMIN, MANAGER, SALES_PERSON
+  passwordHash  String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  inventories   Inventory[]
+  transactions  Transaction[]
+}
+
+model Customer {
+  id            String        @id @default(cuid())
+  name          String
+  phoneNumber   String?
+  transactions  Transaction[]
+}
+
+model EggType {
+  id                String            @id @default(cuid())
+  name              String            // Jumbo, Normal, Pullets
+  priceTrayWholesale Float
+  priceUnitRetail   Float
+  inventories       Inventory[]
+  transactionItems  TransactionItem[]
+}
+
+model Inventory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  eggTypeId   String
+  eggType     EggType  @relation(fields: [eggTypeId], references: [id])
+  goodEggs    Int      @default(0)
+  crackedEggs Int      @default(0)
+  spoiledEggs Int      @default(0)
+
+  @@unique([userId, eggTypeId])
+}
+
+model Transaction {
+  id          String    @id @default(cuid())
+  type        String    // STOCK_IN, SALE, ISSUE, DAMAGE, RECONCILIATION
+  date        DateTime  @default(now())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  
+  // Sales specific fields
+  customerId    String?
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  paymentMethod String?   // CASH, MPESA, CREDIT
+  isCredit      Boolean   @default(false)
+  dueDate       DateTime?
+  totalAmount   Float     @default(0) // Good to store total for quick query
+
+  items       TransactionItem[]
+}
+
+model TransactionItem {
+  id            String       @id @default(cuid())
+  transactionId String
+  transaction   Transaction  @relation(fields: [transactionId], references: [id])
+  eggTypeId     String
+  eggType       EggType      @relation(fields: [eggTypeId], references: [id])
+  quantityEggs  Int
+  unitPrice     Float
+}

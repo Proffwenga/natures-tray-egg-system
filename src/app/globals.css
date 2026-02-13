@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --color-cream: #FDFBF7;
+  --color-sage: #8DA47E;
+  --color-sage-dark: #7B916D;
+  --color-golden: #F4C430;
+  --color-earth: #5D4037;
+  --color-earth-light: #8D6E63;
+  
+  --background: var(--color-cream);
+  --foreground: var(--color-earth);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--color-cream);
+  --color-sage: var(--color-sage);
+  --color-sage-dark: var(--color-sage-dark);
+  --color-golden: var(--color-golden);
+  --color-earth: var(--color-earth);
+  --color-earth-light: var(--color-earth-light);
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  --radius-2xl: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Keep it warm even in dark mode, maybe just darker earth tones */
+    --background: #2C1E1A; 
+    --foreground: #FDFBF7;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
