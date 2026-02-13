@@ -46,7 +46,11 @@ export async function POST(request: Request) {
 
         // Calculate total and prepare transaction items
         let calculatedTotalAmount = 0
-        const transactionItemsData = []
+        const transactionItemsData: {
+            eggTypeId: string;
+            quantityEggs: number;
+            unitPrice: number;
+        }[] = []
 
         // Fetch Egg Types to get prices
         const eggTypes = await prisma.eggType.findMany()
@@ -150,7 +154,7 @@ export async function POST(request: Request) {
 
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.errors }, { status: 400 })
+            return NextResponse.json({ error: error.issues }, { status: 400 })
         }
         console.error(error)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
