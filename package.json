@@ -31,14 +31,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/bcryptjs": "^2.4.6",
-    "prisma": "^6.19.2"
+    "prisma": "^6.19.2",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "tsx": "^4.21.0"
+    "eslint-config-next": "16.1.6"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "npx tsx prisma/seed.ts"
   }
 }
