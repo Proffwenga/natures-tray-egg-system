@@ -22,9 +22,9 @@ async function main() {
     const passwordHash = await bcrypt.hash('password123', 10)
 
     const users = [
-        { name: 'Admin User', role: 'ADMIN', passwordHash },
-        { name: 'Manager One', role: 'MANAGER', passwordHash },
-        { name: 'Sales Person A', role: 'SALES_PERSON', passwordHash },
+        { name: 'admin', role: 'ADMIN', passwordHash },
+        { name: 'manager', role: 'MANAGER', passwordHash },
+        { name: 'sales', role: 'SALES_PERSON', passwordHash },
     ]
 
     console.log('Seeding Users...')
