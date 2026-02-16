@@ -24,18 +24,27 @@ async function main() {
     }
 
     // 2. Create Users
-    const passwordHash = await bcrypt.hash('password123', 10)
+    const defaultHash = await bcrypt.hash('password123', 10)
+    const naphtaliHash = await bcrypt.hash('nttpass123', 10)
+    const alfredHash = await bcrypt.hash('natpass123', 10)
 
     const users = [
-        { name: 'admin', role: 'ADMIN', passwordHash },
-        { name: 'manager', role: 'MANAGER', passwordHash },
-        { name: 'sales', role: 'SALES_PERSON', passwordHash },
+        { name: 'admin', role: 'ADMIN', passwordHash: defaultHash },
+        { name: 'manager', role: 'MANAGER', passwordHash: defaultHash },
+        { name: 'sales', role: 'SALES_PERSON', passwordHash: defaultHash },
+        { name: 'Naphtali', role: 'SALES_PERSON', passwordHash: naphtaliHash },
+        { name: 'Alfred', role: 'SALES_PERSON', passwordHash: alfredHash },
     ]
 
     console.log('Seeding Users...')
     for (const user of users) {
-        await prisma.user.create({
-            data: user,
+        await prisma.user.upsert({
+            where: { name: user.name },
+            update: {
+                role: user.role,
+                passwordHash: user.passwordHash,
+            },
+            create: user,
         })
     }
 
