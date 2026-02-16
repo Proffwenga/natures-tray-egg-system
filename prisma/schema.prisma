@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -62,6 +62,7 @@ model Transaction {
   customer      Customer? @relation(fields: [customerId], references: [id])
   paymentMethod String?   // CASH, MPESA, CREDIT
   supplierName  String?   // For STOCK_IN
+  saleCategory  String?   // RETAIL, WHOLESALE
   isCredit      Boolean   @default(false)
   dueDate       DateTime?
   totalAmount   Float     @default(0) // Good to store total for quick query

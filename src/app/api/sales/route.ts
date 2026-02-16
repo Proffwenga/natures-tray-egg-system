@@ -123,6 +123,7 @@ export async function POST(request: Request) {
                     userId: session.id,
                     customerId,
                     paymentMethod,
+                    saleCategory: type, // NEW: RETAIL or WHOLESALE
                     isCredit,
                     dueDate,
                     totalAmount: calculatedTotalAmount,

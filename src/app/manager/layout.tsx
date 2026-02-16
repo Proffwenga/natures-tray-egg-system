@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, PackagePlus, ArrowRightLeft, ClipboardCheck, AlertTriangle, LogOut } from 'lucide-react'
+import { LayoutDashboard, PackagePlus, ArrowRightLeft, ClipboardCheck, AlertTriangle, LogOut, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function ManagerLayout({
@@ -15,6 +15,7 @@ export default function ManagerLayout({
     const navigation = [
         { name: 'Dashboard', href: '/manager', icon: LayoutDashboard },
         { name: 'Stock In', href: '/manager/stock-in', icon: PackagePlus },
+        { name: 'Sales History', href: '/manager/sales', icon: TrendingUp },
         { name: 'Transfer Stock', href: '/manager/transfer', icon: ArrowRightLeft },
         { name: 'Reconciliation', href: '/manager/reconcile', icon: ClipboardCheck },
         { name: 'Incidents', href: '/manager/damages', icon: AlertTriangle },
