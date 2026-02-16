@@ -16,7 +16,8 @@ export default function StockInPage() {
     const [eggTypes, setEggTypes] = useState<EggType[]>([])
     const [eggTypeId, setEggTypeId] = useState('')
     const [quantityTrays, setQuantityTrays] = useState('')
-    // const [supplier, setSupplier] = useState('') // Not in backend yet, but UI required
+    const [costPerTray, setCostPerTray] = useState('')
+    const [supplierName, setSupplierName] = useState('')
     const [loading, setLoading] = useState(false)
     const [msg, setMsg] = useState('')
 
@@ -36,7 +37,8 @@ export default function StockInPage() {
                 body: JSON.stringify({
                     eggTypeId,
                     quantityTrays: parseInt(quantityTrays),
-                    // supplier 
+                    costPerTray: parseFloat(costPerTray),
+                    supplierName,
                 }),
             })
 
@@ -47,6 +49,8 @@ export default function StockInPage() {
 
             setMsg('Stock added successfully!')
             setQuantityTrays('')
+            setCostPerTray('')
+            setSupplierName('')
         } catch (error: any) {
             setMsg(`Error: ${error.message}`)
         } finally {
@@ -66,8 +70,8 @@ export default function StockInPage() {
                 </CardHeader>
                 <CardContent className="p-8 space-y-6">
                     {msg && (
-                        <div className={`p-4 rounded-2xl flex items-center gap-3 text-sm font-medium ${msg.includes('Error') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}>
-                            {!msg.includes('Error') && <CheckCircle2 size={18} />}
+                        <div className={`p-4 rounded-2xl flex items-center gap-3 text-sm font-medium ${msg.includes('Error') || msg.includes('Failed') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}>
+                            {!(msg.includes('Error') || msg.includes('Failed')) && <CheckCircle2 size={18} />}
                             {msg}
                         </div>
                     )}
@@ -97,7 +101,8 @@ export default function StockInPage() {
                                     required
                                 >
                                     <option value="">Select Type</option>
-                                    {eggTypes.map((t) => (
+                                    {/* Ensure unique names in dropdown as a safety measure */}
+                                    {Array.from(new Map(eggTypes.map(item => [item.name, item])).values()).map((t) => (
                                         <option key={t.id} value={t.id}>{t.name}</option>
                                     ))}
                                 </select>
@@ -124,13 +129,30 @@ export default function StockInPage() {
 
                         <div className="space-y-2">
                             <Label className="text-earth font-medium flex items-center gap-2">
+                                <Hash size={16} className="text-sage" /> Purchase Cost Per Tray
+                            </Label>
+                            <Input
+                                type="number"
+                                step="0.01"
+                                min="0.01"
+                                placeholder="e.g. 350"
+                                className="bg-cream border-none shadow-inner rounded-xl h-12"
+                                value={costPerTray}
+                                onChange={(e) => setCostPerTray(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-earth font-medium flex items-center gap-2">
                                 <Truck size={16} className="text-sage" /> Supplier
                             </Label>
                             <Input
                                 type="text"
                                 placeholder="e.g. Happy Hens Farm"
                                 className="bg-cream border-none shadow-inner rounded-xl h-12"
-                                disabled // Placeholder for now as backend doesn't support it
+                                value={supplierName}
+                                onChange={(e) => setSupplierName(e.target.value)}
                             />
                         </div>
 

@@ -13,8 +13,13 @@ async function main() {
 
     console.log('Seeding Egg Types...')
     for (const type of eggTypes) {
-        await prisma.eggType.create({
-            data: type,
+        await prisma.eggType.upsert({
+            where: { name: type.name },
+            update: {
+                priceTrayWholesale: type.priceTrayWholesale,
+                priceUnitRetail: type.priceUnitRetail,
+            },
+            create: type,
         })
     }
 

@@ -8,6 +8,7 @@ const StockInSchema = z.object({
     eggTypeId: z.string(),
     quantityTrays: z.number().int().positive(),
     costPerTray: z.number().positive(),
+    supplierName: z.string().optional(),
 })
 
 export async function GET(request: Request) {
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json()
-        const { eggTypeId, quantityTrays, costPerTray } = StockInSchema.parse(body)
+        const { eggTypeId, quantityTrays, costPerTray, supplierName } = StockInSchema.parse(body)
 
         const quantityEggs = quantityTrays * 30
 
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
                 data: {
                     type: 'STOCK_IN',
                     userId: session.id,
+                    supplierName,
                     items: {
                         create: {
                             eggTypeId,
@@ -112,7 +114,8 @@ export async function POST(request: Request) {
         return NextResponse.json(result)
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.issues }, { status: 400 })
+            const message = error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ')
+            return NextResponse.json({ error: message }, { status: 400 })
         }
         console.error(error)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
